@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="indiaTripApp">
+<head>
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maps & Memories</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===============================
+   GLOBAL PALE YELLOW THEME
+=================================*/
+
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background:#fff9e6;
+color:#2d2d2d;
+overflow-x:hidden;
+}
+
+/* Abstract Shapes */
+body::before, body::after{
+content:"";
+position:fixed;
+width:500px;
+height:500px;
+border-radius:50%;
+z-index:-1;
+filter:blur(120px);
+}
+body::before{
+background:#ffe8a3;
+top:-150px;
+left:-150px;
+}
+body::after{
+background:#fff1bf;
+bottom:-150px;
+right:-150px;
+}
+
+/* ===============================
+   NAVBAR
+=================================*/
+.main-nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 8%;
+}
+
+.logo{
+font-size:1.7rem;
+font-weight:700;
+color:#c9a227;
+letter-spacing:1px;
+}
+
+.nav-links a{
+margin-left:30px;
+text-decoration:none;
+font-weight:500;
+color:#444;
+transition:0.3s;
+}
+.nav-links a:hover{
+color:#c9a227;
+}
+
+/* ===============================
+   HERO SECTION
+=================================*/
+.hero{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:60px 8%;
+min-height:75vh;
+}
+
+.hero-text{
+max-width:500px;
+}
+.hero-text h1{
+font-size:2.8rem;
+font-weight:700;
+margin-bottom:20px;
+}
+.hero-text p{
+font-size:1.1rem;
+line-height:1.7;
+margin-bottom:30px;
+color:#555;
+}
+.hero-btn{
+padding:12px 28px;
+border-radius:30px;
+border:none;
+background:#f4c542;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+.hero-btn:hover{
+background:#e0b836;
+transform:translateY(-2px);
+}
+
+/* Hero Image Grid */
+.hero-images{
+position:relative;
+width:450px;
+}
+.image-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+.image-grid img{
+width:100%;
+border-radius:20px;
+object-fit:cover;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+.hero-images::before{
+content:"";
+position:absolute;
+width:420px;
+height:420px;
+background:#f4c542;
+border-radius:40% 60% 70% 30% / 30% 40% 60% 70%;
+z-index:-1;
+top:-30px;
+left:-30px;
+opacity:0.3;
+}
+
+/* ===============================
+   SECTION CARDS
+=================================*/
+.section-card{
+background:rgb(251, 255, 230);
+padding:40px;
+border-radius:25px;
+margin:50px auto;
+max-width:1100px;
+box-shadow:0 15px 40px rgba(0,0,0,0.05);
+}
+
+/* ===============================
+   REGION GRID
+=================================*/
+.grid-container{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+padding:20px;
+justify-items:center;
+}
+.card{
+width:280px;
+height:280px;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 15px 40px rgba(0,0,0,0.05);
+transition:0.3s;
+background:white;
+}
+.card:hover{
+transform:translateY(-8px);
+}
+.card img{
+width:100%;
+height:70%;
+object-fit:cover;
+}
+.card-title{
+text-align:center;
+padding-top:10px;
+font-weight:600;
+}
+
+/* Carousel image */
+.carousel-img{
+width:200px;
+height:140px;
+object-fit:cover;
+border-radius:12px;
+}
+
+/* Footer */
+footer{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#f4e3a3;
+padding:8px;
+font-size:0.8rem;
+display:flex;
+justify-content:space-evenly;
+}
+
+</style>
+</head>
+
+<body ng-controller="MainController">
+
+
+<!-- ===============================
+     PROFESSIONAL NAVBAR (Bold Links Only)
+=================================-->
+
+<style>
+.main-nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 60px;
+  background: linear-gradient(135deg,#ffffff,#fff8d6);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  top:0;
+  z-index:1000;
+}
+
+/* Logo (normal weight) */
+.logo{
+  font-size:24px;
+  font-weight:600;   /* Normal bold */
+  color:#c99a00;
+  letter-spacing:1px;
+}
+
+/* Nav links container */
+.nav-links{
+  display:flex;
+  gap:35px;
+}
+
+/* Links — EXTRA BOLD */
+.nav-links a{
+  text-decoration:none;
+  font-size:18px;
+  font-weight:900;   /* Very bold */
+  color:#4d3b00;
+  position:relative;
+  transition:0.3s ease;
+}
+
+/* Underline animation */
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0%;
+  height:3px;
+  background:#e6b800;
+  transition:0.3s ease;
+  border-radius:10px;
+}
+
+.nav-links a:hover{
+  color:#c99a00;
+  transform:translateY(-2px);
+}
+
+.nav-links a:hover::after{
+  width:100%;
+}
+
+/* Responsive */
+@media(max-width:992px){
+  .main-nav{
+    flex-direction:column;
+    gap:15px;
+  }
+  .nav-links{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+}
+</style>
+
+<div class="main-nav">
+
+  <div class="logo">
+    Maps & Memories
+  </div>
+
+  <div class="nav-links">
+    <a href="{{ url_for('journal') }}">Travel Journal</a>
+    <a href="{{ url_for('wishlist') }}">Travel Wishlist</a>
+    <a href="{{ url_for('wildlife') }}">Wildlife</a>
+    <a href="{{ url_for('food') }}">Food to Try</a>
+    <a href="/chatbot">Travel Assistant</a>
+  </div>
+
+</div>
+
+  </div>
+
+</div>
+
+<!-- HERO -->
+<div class="hero">
+<div class="hero-text">
+<h1>Explore the Beauty of India</h1>
+<p style="text-align: justify;">
+Discover the extraordinary diversity of India, from the snow-capped Himalayas and serene backwaters to vibrant cities and timeless villages. Explore ancient temples, majestic forts, colorful festivals, rich traditions, and flavors that tell stories of centuries past. 
+<div style="text-align:center; margin-top:30px;">
+    <a href="{{ url_for('game') }}"
+   style="
+      background:#f6e7a1;
+      color:#5a4a00;
+      text-decoration:none;
+      padding:12px 28px;
+      border-radius:30px;
+      font-weight:600;
+      display:inline-block;
+      transition:0.3s;
+      box-shadow:0 6px 15px rgba(0,0,0,0.06);
+   "
+   onmouseover="this.style.background='#ffe58f'; this.style.transform='translateY(-2px)';"
+   onmouseout="this.style.background='#f6e7a1'; this.style.transform='translateY(0)';"
+>
+   PLAY A GAME
+</a>
+</div>
+
+<div style="text-align:center; margin-top:30px;">
+    <a href="{{ url_for('gallery') }}"
+   style="
+      background:#f6e7a1;
+      color:#5a4a00;
+      text-decoration:none;
+      padding:12px 28px;
+      border-radius:30px;
+      font-weight:600;
+      display:inline-block;
+      transition:0.3s;
+      box-shadow:0 6px 15px rgba(0,0,0,0.06);
+   "
+   onmouseover="this.style.background='#ffe58f'; this.style.transform='translateY(-2px)';"
+   onmouseout="this.style.background='#f6e7a1'; this.style.transform='translateY(0)';"
+>
+   VIEW GALLERY
+</a>
+</div>
+
+
+      
+
+</div>
+
+<div class="hero-images">
+<div class="image-grid">
+<img src="images/north.jpg">
+<img src="images/south.jpg">
+<img src="images/eastern.jpg">
+<img src="images/western.jpg">
+</div>
+</div>
+</div>
+<!-- SIMPLE QUOTES -->
+<div id="travelQuotesCarousel"
+     class="carousel slide"
+     data-bs-ride="carousel"
+     data-bs-interval="5000"
+     style="margin:40px 0; text-align:center;">
+
+  <div class="carousel-inner">
+
+    <div class="carousel-item active">
+      <p style="font-size:1.2rem; font-style:italic; margin:0;">
+        Travel makes one modest. You see what a tiny place you occupy in the world.
+      </p>
+    </div>
+
+    <div class="carousel-item">
+      <p style="font-size:1.2rem; font-style:italic; margin:0;">
+        The world is a book, and those who do not travel read only one page.
+      </p>
+    </div>
+
+    <div class="carousel-item">
+      <p style="font-size:1.2rem; font-style:italic; margin:0;">
+        Wherever you go becomes a part of you somehow.
+      </p>
+    </div>
+
+    <div class="carousel-item">
+      <p style="font-size:1.2rem; font-style:italic; margin:0;">
+        Travel is not about escaping life, but about life not escaping you.
+      </p>
+    </div>
+
+    <div class="carousel-item">
+      <p style="font-size:1.2rem; font-style:italic; margin:0;">
+        In the end, we only regret the chances we didn’t take.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+<!-- REGIONS -->
+<div class="section-card">
+<center><h2>Indian Regions</h2> </center>
+<div class="grid-container">
+<div class="card"
+ng-repeat="region in regions | filter:searchText"
+ng-click="goToPage(region)">
+<img ng-src="[[region.image]]">
+<div class="card-title">[[region.name]]</div>
+</div>
+</div>
+</div>
+
+<input type="text"
+id="stateSearch"
+class="form-control w-50 mx-auto"
+placeholder="Search State or Union Territory..."
+onkeyup="searchState()">
+<br><br>
+
+<div id="indiaCarousel" class="carousel slide" data-bs-ride="carousel">
+
+<div class="carousel-inner">
+
+<!-- SLIDE 1 -->
+<div class="carousel-item active">
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Andhra+Pradesh" target="_blank"><img src="images/andhra.jpg" class="carousel-img"><div class="state-name">Andhra Pradesh</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Arunachal+Pradesh" target="_blank"><img src="images/arunachal.jpg" class="carousel-img"><div class="state-name">Arunachal Pradesh</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Assam" target="_blank"><img src="images/assam.jpg" class="carousel-img"><div class="state-name">Assam</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Bihar" target="_blank"><img src="images/bihar.jpg" class="carousel-img"><div class="state-name">Bihar</div></a></div>
+
+</div>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="carousel-item">
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Chhattisgarh" target="_blank"><img src="images/chhattisgarh.jpg" class="carousel-img"><div class="state-name">Chhattisgarh</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Goa" target="_blank"><img src="images/goa.jpg" class="carousel-img"><div class="state-name">Goa</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Gujarat" target="_blank"><img src="images/gujarat.jpg" class="carousel-img"><div class="state-name">Gujarat</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Haryana" target="_blank"><img src="images/haryana.jpg" class="carousel-img"><div class="state-name">Haryana</div></a></div>
+
+</div>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="carousel-item">
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Himachal+Pradesh" target="_blank"><img src="images/himachal.jpg" class="carousel-img"><div class="state-name">Himachal Pradesh</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Jharkhand" target="_blank"><img src="images/jharkhand.jpg" class="carousel-img"><div class="state-name">Jharkhand</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Karnataka" target="_blank"><img src="images/karnataka.jpg" class="carousel-img"><div class="state-name">Karnataka</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Kerala" target="_blank"><img src="images/kerala.jpg" class="carousel-img"><div class="state-name">Kerala</div></a></div>
+
+</div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="carousel-item">
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Madhya+Pradesh" target="_blank"><img src="images/mp.jpg" class="carousel-img"><div class="state-name">Madhya Pradesh</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Maharashtra" target="_blank"><img src="images/maharashtra.jpg" class="carousel-img"><div class="state-name">Maharashtra</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Manipur" target="_blank"><img src="images/manipur.jpg" class="carousel-img"><div class="state-name">Manipur</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Meghalaya" target="_blank"><img src="images/meghalaya.jpg" class="carousel-img"><div class="state-name">Meghalaya</div></a></div>
+
+</div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="carousel-item">
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Mizoram" target="_blank"><img src="images/mizoram.jpg" class="carousel-img"><div class="state-name">Mizoram</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Nagaland" target="_blank"><img src="images/nagaland.jpg" class="carousel-img"><div class="state-name">Nagaland</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Odisha" target="_blank"><img src="images/odisha.jpg" class="carousel-img"><div class="state-name">Odisha</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Punjab" target="_blank"><img src="images/punjab.jpg" class="carousel-img"><div class="state-name">Punjab</div></a></div>
+
+</div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="carousel-item">
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Rajasthan" target="_blank"><img src="images/rajasthan.jpg" class="carousel-img"><div class="state-name">Rajasthan</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Sikkim" target="_blank"><img src="images/sikkim.jpg" class="carousel-img"><div class="state-name">Sikkim</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Tamil+Nadu" target="_blank"><img src="images/tamilnadu.jpg" class="carousel-img"><div class="state-name">Tamil Nadu</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Telangana" target="_blank"><img src="images/telangana.jpg" class="carousel-img"><div class="state-name">Telangana</div></a></div>
+
+</div>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="carousel-item">
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Tripura" target="_blank"><img src="images/tripura.jpg" class="carousel-img"><div class="state-name">Tripura</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Uttar+Pradesh" target="_blank"><img src="images/up.jpg" class="carousel-img"><div class="state-name">Uttar Pradesh</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Uttarakhand" target="_blank"><img src="images/uttarakhand.jpg" class="carousel-img"><div class="state-name">Uttarakhand</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/West+Bengal" target="_blank"><img src="images/westbengal.jpg" class="carousel-img"><div class="state-name">West Bengal</div></a></div>
+
+</div>
+</div>
+
+<!-- UNION TERRITORIES -->
+<div class="carousel-item">
+<div class="d-flex justify-content-center gap-3 flex-wrap">
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Delhi" target="_blank"><img src="images/delhi.jpg" class="carousel-img"><div class="state-name">Delhi</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Puducherry" target="_blank"><img src="images/puducherry.jpg" class="carousel-img"><div class="state-name">Puducherry</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Jammu+and+Kashmir" target="_blank"><img src="images/jk.jpg" class="carousel-img"><div class="state-name">Jammu & Kashmir</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Ladakh" target="_blank"><img src="images/ladakh.jpg" class="carousel-img"><div class="state-name">Ladakh</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Andaman+and+Nicobar+Islands" target="_blank"><img src="images/andaman.jpg" class="carousel-img"><div class="state-name">Andaman & Nicobar</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Chandigarh" target="_blank"><img src="images/chandigarh.jpg" class="carousel-img"><div class="state-name">Chandigarh</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Dadra+and+Nagar+Haveli+and+Daman+and+Diu" target="_blank"><img src="images/dnhdd.jpg" class="carousel-img"><div class="state-name">DNH & DD</div></a></div>
+
+<div class="state-box"><a href="https://www.google.com/maps/search/Lakshadweep" target="_blank"><img src="images/lakshadweep.jpg" class="carousel-img"><div class="state-name">Lakshadweep</div></a></div>
+
+</div>
+</div>
+
+</div>
+<button class="carousel-control-prev" type="button" data-bs-target="#indiaCarousel" data-bs-slide="prev">
+<span class="carousel-control-prev-icon"></span>
+</button>
+<button class="carousel-control-next" type="button" data-bs-target="#indiaCarousel" data-bs-slide="next">
+<span class="carousel-control-next-icon"></span>
+</button>
+</div>
+</div>
+
+<!-- Angular Script (UNCHANGED LOGIC) -->
+<script>
+var app = angular.module('indiaTripApp', []);
+
+app.config(function($interpolateProvider) {
+$interpolateProvider.startSymbol('[[');
+$interpolateProvider.endSymbol(']]');
+});
+
+app.controller('MainController', function($scope, $window, $http) {
+
+$scope.searchText = "";
+
+$scope.regions = [
+{ name: "Northern India", page: "/north", image: "images/north.jpg" },
+{ name: "Southern India", page: "/south", image: "images/south.jpg" },
+{ name: "Eastern India", page: "/eastern", image: "images/eastern.jpg" },
+{ name: "Western India", page: "/western", image: "images/western.jpg" },
+{ name: "Central India", page: "/central", image: "images/central.jpg" },
+{ name: "North-Eastern India", page: "/northeast", image: "images/northeast.jpg" },
+{ name: "Union Territories", page: "/ut", image: "images/ut.jpg" },
+{ name: "Popular Cities", page: "/pc", image: "images/pc.jpg" },
+{ name: "Monuments", page: "/monuments", image: "images/monuments.jpg" }
+];
+
+$scope.goToPage = function(region){
+$window.location.href = region.page;
+};
+
+});
+
+function searchState() {
+  const input = document.getElementById("stateSearch").value.toLowerCase();
+  const stateBoxes = document.querySelectorAll(".state-box");
+  const slides = document.querySelectorAll(".carousel-item");
+
+  let found = false;
+
+  stateBoxes.forEach(box => {
+    const name = box.innerText.toLowerCase();
+
+    if (name.includes(input)) {
+      box.style.display = "block";
+      found = true;
+
+      // Activate the slide containing the match
+      const slide = box.closest(".carousel-item");
+      slides.forEach(s => s.classList.remove("active"));
+      slide.classList.add("active");
+    } else {
+      box.style.display = "none";
+    }
+  });
+
+  // If search is cleared → show everything again
+  if (input === "") {
+    stateBoxes.forEach(box => box.style.display = "block");
+    slides.forEach((s, i) => {
+      s.classList.remove("active");
+      if (i === 0) s.classList.add("active");
+    });
+  }
+}
+
+$scope.saveMemory = function(){
+
+  if(!$scope.memory.title || !$scope.memory.drive_link){
+    alert("Please enter title and drive link");
+    return;
+  }
+
+  $http({
+    method: "POST",
+    url: "/upload-memory",
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: $.param({
+      title: $scope.memory.title,
+      drive_link: $scope.memory.drive_link
+    })
+  }).then(function(){
+      $scope.memory = {};
+      $scope.loadMemories();
+  });
+
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="section-card" style="max-width:900px;">
+
+  <h2 style="text-align:center;">Save a Drive Memory</h2>
+
+  <form method="POST" action="{{ url_for('upload_memory') }}"
+        style="max-width:600px; margin:30px auto;">
+
+    <input type="text"
+           name="title"
+           placeholder="Memory Title"
+           class="form-control mb-3"
+           required>
+
+    <input type="text"
+           name="drive_link"
+           placeholder="Google Drive Link"
+           class="form-control mb-3"
+           required>
+
+    <div style="text-align:center;">
+      <button type="submit" class="hero-btn">
+        Save Memory
+      </button>
+    </div>
+
+  </form>
+
+  <hr>
+
+  <h4 style="text-align:center;">Your Memories</h4>
+
+  {% if memories|length == 0 %}
+      <p style="text-align:center; color:#888;">No memories yet</p>
+  {% endif %}
+
+  {% for m in memories %}
+  <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:#fff3c4;
+      padding:14px 16px;
+      margin:14px 0;
+      border-radius:16px;
+    ">
+
+    <a href="{{ m.drive_link }}"
+       target="_blank"
+       style="font-weight:600; color:#5a4a00; text-decoration:none;">
+       🔗 {{ m.title }}
+    </a>
+
+    <form method="POST"
+          action="{{ url_for('delete_memory', memory_id=m.id) }}">
+        <button type="submit"
+                style="background:#e6c45a; border:none; padding:6px 14px; border-radius:10px;">
+          Delete
+        </button>
+    </form>
+
+  </div>
+  {% endfor %}
+
+</div>
+<br><br>
+<center>
+  <a href="{{ url_for('login') }}"
+     style="
+        background:#f6e7a1;
+        color:#5a4a00;
+        text-decoration:none;
+        padding:12px 28px;
+        border-radius:30px;
+        font-weight:600;
+        display:inline-block;
+        transition:0.3s;
+     "
+     onmouseover="this.style.background='#ffe58f'; this.style.transform='translateY(-2px)';"
+     onmouseout="this.style.background='#f6e7a1'; this.style.transform='translateY(0)';"
+  >
+    End Exploring
+  </a>
+</center><br> <br> <br> <br> 
+
+<footer>
+<span>🌍 Maps&Memories © 2026</span>
+<span>Explore • Plan • Experience India</span>
+<span>Flask + AngularJs</span>
+</footer>
+
+</body>
+</html>

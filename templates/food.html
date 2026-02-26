@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="foodApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foods to Try in India</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+  <style>
+    body {
+      font-family: "poppins", cursive, sans-serif;
+      background: linear-gradient(270deg, #fff8dc, #fffacd, #fff9e3, #fff8dc);
+      background-size: 800% 800%;
+      animation: pastelPulse 20s ease infinite;
+      padding-bottom: 50px;
+      font-weight: bold;
+    }
+
+    @keyframes pastelPulse {
+      0% {background-position: 0% 50%;}
+      25% {background-position: 50% 100%;}
+      50% {background-position: 100% 50%;}
+      75% {background-position: 50% 0%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    h2 {
+      color: #1a0847;
+      margin-bottom: 30px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #fffacd, #fff8dc);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: default;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+    }
+
+    .food-name {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #d2691e;
+    }
+
+    .food-emoji {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body ng-controller="FoodController">
+
+  <div class="container">
+    <h1 style="margin:0;">
+      <a href="https://en.wikipedia.org/wiki/Indian_cuisine" 
+         style="text-decoration: none; color: inherit;"
+         onmouseover="this.style.color='red';"
+         onmouseout="this.style.color='inherit';">
+        Most Diverse Cuisine
+      </a>
+    </h1>
+
+    <br><br>
+
+    <div class="grid-container">
+      <div class="card" ng-repeat="state in states">
+        <div class="food-emoji">[[state.emoji]]</div>
+        <div class="food-name">[[state.dish]]</div>
+        <div>[[state.name]]</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var app = angular.module('foodApp', []);
+
+    app.config(function($interpolateProvider) {
+      $interpolateProvider.startSymbol('[[');
+      $interpolateProvider.endSymbol(']]');
+    });
+
+    app.controller('FoodController', function($scope) {
+      $scope.states = [
+        { name: "Andhra Pradesh", dish: "Pesarattu", emoji: "🥙" },
+        { name: "Arunachal Pradesh", dish: "Thukpa", emoji: "🥣" },
+        { name: "Assam", dish: "Assam Laksa", emoji: "🍜" },
+        { name: "Bihar", dish: "Litti Chokha", emoji: "🥘" },
+        { name: "Chhattisgarh", dish: "Chana Samosa", emoji: "🥟" },
+        { name: "Goa", dish: "Goan Fish Curry", emoji: "🐟" },
+        { name: "Gujarat", dish: "Dhokla", emoji: "🟡" },
+        { name: "Haryana", dish: "Bajra Khichdi", emoji: "🍲" },
+        { name: "Himachal Pradesh", dish: "Chha Gosht", emoji: "🥩" },
+        { name: "Jharkhand", dish: "Thekua", emoji: "🍪" },
+        { name: "Karnataka", dish: "Bisibele Bath", emoji: "🍲" },
+        { name: "Kerala", dish: "Appam with Stew", emoji: "🍚" },
+        { name: "Madhya Pradesh", dish: "Bhutte Ka Kees", emoji: "🌽" },
+        { name: "Maharashtra", dish: "Pav Bhaji", emoji: "🍞" },
+        { name: "Manipur", dish: "Eromba", emoji: "🥗" },
+        { name: "Meghalaya", dish: "Jadoh", emoji: "🍲" },
+        { name: "Mizoram", dish: "Bai", emoji: "🥬" },
+        { name: "Nagaland", dish: "Akhuni Pork", emoji: "🥓" },
+        { name: "Odisha", dish: "Dalma", emoji: "🥘" },
+        { name: "Punjab", dish: "Butter Chicken", emoji: "🍗" },
+        { name: "Rajasthan", dish: "Dal Baati Churma", emoji: "🥣" },
+        { name: "Sikkim", dish: "Momos", emoji: "🥟" },
+        { name: "Tamil Nadu", dish: "Dosa", emoji: "🥞" },
+        { name: "Telangana", dish: "Hyderabadi Biryani", emoji: "🍛" },
+        { name: "Tripura", dish: "Mui Borok", emoji: "🥗" },
+        { name: "Uttar Pradesh", dish: "Kachori", emoji: "🥯" },
+        { name: "Uttarakhand", dish: "Bhatt Ki Churdkani", emoji: "🍛" },
+        { name: "West Bengal", dish: "Rosogolla", emoji: "⚪" }
+      ];
+    });
+  </script>
+
+</body>
+</html>

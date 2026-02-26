@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="monumentTripApp">
+<head>
+<meta charset="UTF-8">
+<title>Iconic Indian Monuments</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f4f7ff, #fff6f2);
+  padding-bottom: 80px;
+}
+
+h1 {
+  text-align: center;
+  margin: 40px 0;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* REGION BOX */
+.region-box {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 40px 30px;
+  border-radius: 26px;
+}
+
+.region-box:nth-of-type(1) { background: #fde2e4; }
+.region-box:nth-of-type(2) { background: #e2f0cb; }
+.region-box:nth-of-type(3) { background: #dfe7fd; }
+.region-box:nth-of-type(4) { background: #fff1c1; }
+.region-box:nth-of-type(5) { background: #e6f7f1; }
+
+.region-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+
+.monument-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+.monument-card {
+  background: rgba(255,255,255,0.8);
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.monument-card h5 {
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.monument-card p {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.badge {
+  margin-top: 12px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .monument-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body ng-controller="MonumentTripController">
+
+<h1>Iconic Indian Monuments</h1>
+
+<div ng-repeat="region in regions" class="region-box">
+
+  <div class="region-title">[[region.name]]</div>
+
+  <!-- ✅ GRID IS ON MONUMENTS -->
+  <div class="monument-grid">
+    <div class="monument-card" ng-repeat="m in region.monuments">
+
+      <h5>[[m.name]]</h5>
+
+      <p><strong>Location:</strong> [[m.places[0].location]]</p>
+      <p><strong>Built By:</strong> [[m.places[0].builder]]</p>
+      <p><strong>Period:</strong> [[m.places[0].year]]</p>
+      <p><strong>Architectural Style:</strong> [[m.places[0].style]]</p>
+      <p><strong>Why Famous:</strong> [[m.places[0].fame]]</p>
+      <p><strong>Best Time to Visit:</strong> [[m.places[0].bestTime]]</p>
+      <p><strong>Travel Tip:</strong> [[m.places[0].tip]]</p>
+
+      <span class="badge bg-secondary">[[m.city]]</span>
+
+    </div>
+  </div>
+
+</div>
+<script>
+var app = angular.module("monumentTripApp", []);
+
+app.config(function($interpolateProvider) {
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+});
+
+app.controller("MonumentTripController", function($scope) {
+$scope.regions = [
+
+{
+name: "North India (Mughal, Rajput & Sikh Heritage)",
+monuments: [
+
+{ name: "Taj Mahal", city: "Agra", places: [{ name: "Main Mausoleum", location: "Agra, Uttar Pradesh", builder: "Shah Jahan", year: "1632–1653", style: "Mughal Architecture", fame: "White marble mausoleum and global symbol of love", bestTime: "October to March, sunrise", tip: "Visit early morning for minimal crowds" }] },
+{ name: "Red Fort", city: "Delhi", places: [{ name: "Lal Qila Complex", location: "Old Delhi", builder: "Shah Jahan", year: "1648", style: "Mughal Fort Architecture", fame: "Former Mughal palace and national symbol", bestTime: "Winter months", tip: "Evening sound-and-light show is worth attending" }] },
+{ name: "Qutub Minar", city: "Delhi", places: [{ name: "Victory Minaret", location: "Mehrauli, Delhi", builder: "Qutb-ud-din Aibak", year: "1193", style: "Indo-Islamic", fame: "Tallest brick minaret in the world", bestTime: "Morning or late afternoon", tip: "Observe the Iron Pillar nearby" }] },
+{ name: "India Gate", city: "Delhi", places: [{ name: "War Memorial", location: "New Delhi", builder: "Edwin Lutyens", year: "1931", style: "Triumphal Arch", fame: "Memorial to Indian soldiers of WWI", bestTime: "Evening", tip: "Visit after sunset for illuminated views" }] },
+{ name: "Hawa Mahal", city: "Jaipur", places: [{ name: "Palace of Winds", location: "Jaipur, Rajasthan", builder: "Sawai Pratap Singh", year: "1799", style: "Rajput Architecture", fame: "953 jharokhas forming a honeycomb facade", bestTime: "Morning", tip: "Best photographs from street side" }] },
+{ name: "Amber Fort", city: "Jaipur", places: [{ name: "Hilltop Fort", location: "Amer, Rajasthan", builder: "Raja Man Singh", year: "1592", style: "Rajput–Mughal", fame: "Majestic fort overlooking Maota Lake", bestTime: "October to March", tip: "Use jeep rides instead of elephants" }] },
+{ name: "Golden Temple", city: "Amritsar", places: [{ name: "Harmandir Sahib", location: "Amritsar, Punjab", builder: "Guru Arjan Dev", year: "1604", style: "Sikh Architecture", fame: "Holiest Sikh shrine", bestTime: "Early morning or night", tip: "Visit langar respectfully" }] },
+{ name: "Humayun’s Tomb", city: "Delhi", places: [{ name: "Garden Tomb Complex", location: "Nizamuddin East, Delhi", builder: "Empress Bega Begum", year: "1565–1572", style: "Mughal Architecture", fame: "First garden-tomb in India and inspiration for the Taj Mahal", bestTime: "October to March, early morning", tip: "Walk through the Charbagh gardens for symmetry views" }] }
+
+]
+},
+
+{
+name: "West & Central India (Caves & Stupas)",
+monuments: [
+{ name: "Ajanta & Ellora Caves", city: "Maharashtra", places: [{ name: "Rock-cut Cave Complex", location: "Aurangabad, Maharashtra", builder: "Various Dynasties", year: "2nd Century BCE – 10th Century CE", style: "Buddhist, Hindu & Jain", fame: "Ancient cave art and sculptures", bestTime: "October to March", tip: "Hire a guide to understand murals" }] },
+{ name: "Sanchi Stupa", city: "Madhya Pradesh", places: [{ name: "Great Stupa", location: "Sanchi", builder: "Emperor Ashoka", year: "3rd Century BCE", style: "Buddhist Architecture", fame: "Oldest stone structure in India", bestTime: "Winter months", tip: "Study the carved gateways" }] },
+{ name: "Khajuraho Temples", city: "Madhya Pradesh", places: [{ name: "Temple Complex", location: "Khajuraho", builder: "Chandela Dynasty", year: "950–1050 CE", style: "Nagara Style", fame: "Intricate sculptures and carvings", bestTime: "October to March", tip: "Visit Western group first" }] },
+{ name: "Udayagiri Caves", city: "Madhya Pradesh", places: [{ name: "Rock-cut Caves", location: "Vidisha, Madhya Pradesh", builder: "Gupta Dynasty", year: "4th–5th Century CE", style: "Hindu & Jain Rock-cut Architecture", fame: "Early Hindu iconography including Varaha relief", bestTime: "October to February", tip: "Go early to avoid heat and crowds" }] }
+]
+},
+
+{
+name: "East India (Temples & Colonial)",
+monuments: [
+{ name: "Sun Temple", city: "Konark", places: [{ name: "Chariot Temple", location: "Odisha", builder: "King Narasimhadeva I", year: "13th Century", style: "Kalinga Architecture", fame: "Stone chariot dedicated to Sun God", bestTime: "Winter months", tip: "Morning light enhances carvings" }] },
+{ name: "Victoria Memorial", city: "Kolkata", places: [{ name: "Colonial Monument", location: "Kolkata", builder: "William Emerson", year: "1906–1921", style: "Indo-Saracenic", fame: "British-era marble memorial", bestTime: "Evening", tip: "Garden walk at sunset" }] }
+]
+},
+
+{
+name: "South India (Temple Towns & Historical Sites)",
+monuments: [
+{ name: "Hampi", city: "Karnataka", places: [{ name: "Vijayanagara Ruins", location: "Hampi", builder: "Vijayanagara Empire", year: "14th–16th Century", style: "Dravidian", fame: "UNESCO World Heritage Site", bestTime: "October to February", tip: "Rent a bicycle to explore ruins" }] },
+{ name: "Mysore Palace", city: "Karnataka", places: [{ name: "Royal Residence", location: "Mysuru", builder: "Wodeyar Dynasty", year: "1912", style: "Indo-Saracenic", fame: "Illuminated royal palace", bestTime: "Dussehra festival", tip: "Night illumination is spectacular" }] },
+{ name: "Charminar", city: "Hyderabad", places: [{ name: "Historic Monument", location: "Hyderabad, Telangana", builder: "Muhammad Quli Qutb Shah", year: "1591", style: "Indo-Islamic Architecture", fame: "Iconic four-minaret monument and symbol of Hyderabad", bestTime: "October to March, evening", tip: "Visit at night for illuminated views and explore nearby bazaars" }] },
+{ name: "Meenakshi Amman Temple", city: "Madurai", places: [{ name: "Dravidian Temple", location: "Madurai, Tamil Nadu", builder: "Pandya Dynasty", year: "12th–16th Century", style: "Dravidian Architecture", fame: "Towering gopurams and sculptures", bestTime: "Early morning", tip: "Dress modestly" }] }
+]
+},
+
+{
+name: "West Coast (Coastal & Colonial)",
+monuments: [
+{ name: "Basilica of Bom Jesus", city: "Goa", places: [{ name: "Historic Church", location: "Old Goa, Goa", builder: "Portuguese Missionaries", year: "1605", style: "Baroque Architecture", fame: "UNESCO World Heritage Site housing the relics of St. Francis Xavier", bestTime: "November to February", tip: "Visit early morning for a quiet experience" }] },
+
+{ name: "Gateway of India", city: "Mumbai", places: [{ name: "Harbour Arch", location: "Mumbai, Maharashtra", builder: "George Wittet", year: "1924", style: "Indo-Saracenic", fame: "Iconic coastal monument", bestTime: "Evening", tip: "Pair with Marine Drive walk" }] }
+]
+}
+
+];
+});
+</script>
+
+</body>
+</html>

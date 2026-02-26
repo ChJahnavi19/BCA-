@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="journalApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Journal</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+  <style>
+:root{
+  --yellow-bg:#fff9e6;
+  --yellow-soft:#f5e6c8;
+  --yellow-card:#fffdf4;
+  --yellow-main:#f4d97b;
+  --yellow-deep:#e6c45a;
+  --text-dark:#5a4a00;
+  --shadow-soft:rgba(0,0,0,0.08);
+}
+
+body{
+  font-family:"Poppins", sans-serif;
+  background:var(--yellow-bg);
+  padding-bottom:80px;
+}
+
+/* Soft glow */
+body::before{
+  content:"";
+  position:fixed;
+  width:500px;
+  height:500px;
+  background:#fdeaa8;
+  border-radius:50%;
+  top:-120px;
+  left:-120px;
+  filter:blur(120px);
+  z-index:-1;
+}
+
+.journal-container{
+  max-width:800px;
+  margin:60px auto;
+  padding:40px;
+  background:var(--yellow-card);
+  border-radius:28px;
+  box-shadow:0 25px 60px var(--shadow-soft);
+  border:1px solid #f1e2b5;
+}
+
+h2{
+  color:var(--text-dark);
+  font-weight:700;
+}
+
+/* Notes-style inputs */
+.note-input{
+  border:none;
+  border-bottom:1px solid #f1e2b5;
+  background:transparent;
+  padding:12px 0;
+  width:100%;
+  font-size:1rem;
+  outline:none;
+  margin-bottom:20px;
+}
+
+.note-input:focus{
+  border-bottom:1px solid var(--yellow-deep);
+}
+
+/* Large writing area */
+.note-textarea{
+  border:none;
+  background:transparent;
+  width:100%;
+  resize:none;
+  outline:none;
+  font-size:1rem;
+  line-height:1.6;
+  min-height:120px;
+  margin-bottom:25px;
+}
+
+.save-btn{
+  background:var(--yellow-main);
+  border:none;
+  padding:10px 24px;
+  border-radius:20px;
+  font-weight:600;
+  color:#4a3d00;
+  transition:0.2s ease;
+}
+
+.save-btn:hover{
+  background:var(--yellow-deep);
+}
+
+/* Saved notes */
+.note-card{
+  background:var(--yellow-soft);
+  padding:20px;
+  border-radius:20px;
+  margin-bottom:20px;
+  box-shadow:0 15px 35px var(--shadow-soft);
+  border:1px solid #f1e2b5;
+}
+
+.delete-btn{
+  background:var(--yellow-deep);
+  border:none;
+  padding:6px 16px;
+  border-radius:12px;
+  color:#4a3d00;
+  font-weight:600;
+}
+
+.delete-btn:hover{
+  background:#d8b94f;
+}
+</style>
+</head>
+<body ng-controller="JournalController">
+<div class="journal-container">
+  <h2 class="text-center mb-4">📝 Travel Notes</h2>
+
+  <!-- NOTES INPUT -->
+  <div>
+    <input class="note-input"
+           ng-model="entry.location"
+           placeholder="Location">
+
+    <textarea class="note-textarea"
+           ng-model="entry.food"
+           placeholder="Food you tried"></textarea>
+
+    <textarea class="note-textarea"
+              ng-model="entry.memory"
+              placeholder="Write your memory here..."></textarea>
+
+    <textarea class="note-textarea"
+              ng-model="entry.notes"
+              placeholder="Additional notes..."></textarea>
+
+    <div class="text-center mt-3">
+      <button type="button" class="save-btn" ng-click="saveEntry()">
+  Save Note
+</button>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- SAVED NOTES -->
+  <div ng-if="entries.length === 0" class="text-center text-muted">
+    No notes yet
+  </div>
+
+  <div ng-repeat="e in entries" class="note-card">
+    <strong>[[e.location]]</strong><br><br>
+    <em>[[e.food || ""]]</em><br><br>
+    [[e.memory || ""]]<br><br>
+    [[e.notes || ""]]
+
+    <div class="text-end mt-3">
+      <button class="delete-btn" ng-click="deleteEntry(e.id)">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ANGULAR SCRIPT -->
+<script>
+  var app = angular.module("journalApp", []);
+
+  app.config(function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+  });
+
+  app.controller("JournalController", function($scope, $http) {
+
+    $scope.colors = [
+      "#ffd6e8",
+      
+    ];
+
+    $scope.entry = { color: "ffd6e8" };
+    $scope.entries = [];
+
+    function loadEntries() {
+      $http.get("/api/journal").then(function(res) {
+        $scope.entries = res.data;
+      });
+    }
+
+    loadEntries();
+
+    $scope.saveEntry = function() {
+      $http.post("/api/journal", {
+        location: $scope.entry.location,
+        food: $scope.entry.food,
+        memory: $scope.entry.memory,
+        notes: $scope.entry.notes,
+        color: $scope.entry.color
+      }).then(function() {
+        loadEntries();
+        $scope.entry = { color: "#ffd6e8" };
+      });
+    };
+
+    $scope.deleteEntry = function(id) {
+      if (confirm("Delete this entry?")) {
+        $http.delete("/api/journal/" + id).then(function() {
+          $scope.entries = $scope.entries.filter(e => e.id !== id);
+        });
+      }
+    };
+  });
+</script>
+
+
+
+</body>
+</html>

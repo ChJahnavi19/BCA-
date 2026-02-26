@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="indiaLearnBot">
+<head>
+<meta charset="UTF-8">
+<title>Learn India Chatbot</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+
+<style>
+/* ===============================
+   GLOBAL THEME
+=================================*/
+:root{
+  --primary:#e6b800;
+  --primary-dark:#c99a00;
+  --soft:#fff6d9;
+  --light:#fffdf5;
+  --text:#4d3b00;
+  --glass:rgba(255,255,255,0.75);
+  --shadow:0 20px 50px rgba(0,0,0,0.08);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  background: linear-gradient(135deg,#fffdf4,#fff8d6);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px 0;
+}
+
+/* Soft glow background */
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  width:400px;
+  height:400px;
+  border-radius:50%;
+  filter:blur(120px);
+  z-index:-1;
+}
+body::before{
+  background:#ffe066;
+  top:-100px;
+  left:-100px;
+}
+body::after{
+  background:#fff3b0;
+  bottom:-120px;
+  right:-120px;
+}
+
+/* ===============================
+   CHATBOT CARD
+=================================*/
+.chatbot{
+  width:460px;
+  max-width:95%;
+  height:640px;
+  background:var(--glass);
+  backdrop-filter:blur(15px);
+  border-radius:30px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.4);
+  margin-bottom:35px;
+}
+
+/* Header */
+.header{
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color:white;
+  padding:20px;
+  text-align:center;
+  font-size:18px;
+  font-weight:600;
+  letter-spacing:0.5px;
+}
+
+/* Messages */
+.messages{
+  flex:1;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  overflow-y:auto;
+  background:var(--light);
+}
+
+/* Scrollbar */
+.messages::-webkit-scrollbar{
+  width:6px;
+}
+.messages::-webkit-scrollbar-thumb{
+  background:var(--primary);
+  border-radius:10px;
+}
+
+/* Message bubbles */
+.message{
+  padding:12px 16px;
+  max-width:75%;
+  font-size:14px;
+  line-height:1.6;
+  border-radius:20px;
+  animation:fadeIn 0.3s ease;
+}
+
+.user{
+  align-self:flex-end;
+  background:var(--primary);
+  color:white;
+  border-bottom-right-radius:6px;
+}
+
+.bot{
+  align-self:flex-start;
+  background:var(--soft);
+  color:var(--text);
+  border-bottom-left-radius:6px;
+}
+
+/* Input Area */
+.input-area{
+  padding:16px;
+  display:flex;
+  gap:10px;
+  background:white;
+  border-top:1px solid #f0e0b2;
+}
+
+input{
+  flex:1;
+  padding:12px 14px;
+  border-radius:20px;
+  border:1px solid #f0e0b2;
+  font-size:14px;
+  outline:none;
+  transition:0.2s ease;
+}
+
+input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(230,184,0,0.2);
+}
+
+button{
+  padding:12px 18px;
+  border-radius:20px;
+  border:none;
+  background:var(--primary);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.2s ease;
+}
+
+button:hover{
+  background:var(--primary-dark);
+  transform:translateY(-2px);
+}
+
+/* Suggestions */
+.suggestions{
+  background:white;
+  border-radius:14px;
+  margin:0 16px 10px;
+  border:1px solid #fff8e4;
+  max-height:120px;
+  overflow-y:auto;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+.suggestions div{
+  padding:8px 12px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.suggestions div:hover{
+  background:var(--soft);
+}
+
+/* Back Link */
+.back{
+  text-align:center;
+  padding:14px;
+  background:var(--soft);
+  color:var(--text);
+  text-decoration:none;
+  font-weight:500;
+  transition:0.2s;
+}
+
+.back:hover{
+  background:#f4e3b5;
+}
+
+/* ===============================
+   BOOKING SECTION
+=================================*/
+.booking-section{
+  width:460px;
+  max-width:95%;
+  background:var(--glass);
+  backdrop-filter:blur(15px);
+  border-radius:30px;
+  box-shadow:var(--shadow);
+  padding:25px;
+  border:1px solid rgba(255,255,255,0.4);
+  text-align:center;
+  margin-bottom:60px;
+}
+
+.booking-title{
+  font-size:18px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:20px;
+}
+
+.booking-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.booking-btn{
+  text-decoration:none;
+  padding:12px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:600;
+  background:var(--primary);
+  color:white;
+  transition:0.2s ease;
+  box-shadow:0 8px 18px rgba(0,0,0,0.08);
+}
+
+.booking-btn:hover{
+  background:var(--primary-dark);
+  transform:translateY(-3px);
+}
+
+/* ===============================
+   ANIMATIONS
+=================================*/
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(5px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ===============================
+   RESPONSIVE
+=================================*/
+@media(max-width:480px){
+  .chatbot{
+    height:600px;
+  }
+}
+</style>
+</head>
+
+<body ng-controller="BotController">
+
+<div class="chatbot">
+  <div class="header">Learn your country!</div>
+
+  <div class="messages" id="msgBox">
+    <div class="message bot">
+      👋 Type any Indian State or Union Territory.
+    </div>
+    <div ng-repeat="msg in messages" class="message [[msg.sender]]">
+      [[msg.text]]
+    </div>
+  </div>
+
+  <!-- AUTOSUGGEST -->
+  <div class="suggestions" ng-if="suggestions.length">
+    <div ng-repeat="s in suggestions" ng-click="selectSuggestion(s)">
+      [[s]]
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input ng-model="userInput"
+           ng-keypress="checkEnter($event)"
+           ng-change="autoSuggest()"
+           placeholder="Example: Kerala, Ladakh">
+    <button ng-click="send()">Send</button>
+  </div>
+
+  <a href="/index" class="back">Go Back</a>
+</div>
+
+<script>
+angular.module("indiaLearnBot", [])
+.config(function($interpolateProvider){
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+})
+.controller("BotController", function($scope){
+
+$scope.messages=[];
+$scope.suggestions=[];
+
+const data = 
+  { /* -------- STATES (28) -------- */ "andhra pradesh": "📍 Let’s learn about Andhra Pradesh.\nKnown for its ancient temples and long coastline, Andhra Pradesh beautifully blends spirituality and nature. Tirupati stands as one of the most sacred pilgrimage sites in the world, while Visakhapatnam offers serene beaches and hill views. The state’s culture is deeply rooted in classical dance, music, and rich Telugu heritage.", "arunachal pradesh": "📍 Let’s learn about Arunachal Pradesh.\nOften called the Land of the Rising Sun, Arunachal Pradesh is India’s easternmost gem. Snow-clad mountains, Buddhist monasteries, and untouched tribal traditions define its peaceful charm. It is a paradise for those who love silence, spirituality, and raw nature.", "assam": "📍 Let’s learn about Assam.\nAssam flows with life through the mighty Brahmaputra River. Famous for its lush tea gardens and wildlife sanctuaries like Kaziranga, the state reflects a calm rhythm of nature and culture. Assamese traditions, music, and festivals add warmth to its green landscapes.", "bihar": "📍 Let’s learn about Bihar.\nBihar is the land where history breathes. It gave the world Buddhism through Bodh Gaya and was home to the ancient Nalanda University. The state reflects deep spiritual roots, ancient wisdom, and a resilient cultural identity.", "chhattisgarh": "📍 Let’s learn about Chhattisgarh.\nRich in forests, waterfalls, and tribal culture, Chhattisgarh remains one of India’s most untouched regions. Its natural beauty lies in simplicity, where traditions have lived unchanged for centuries.", "goa": "📍 Let’s learn about Goa.\nGoa is where golden beaches meet Portuguese heritage. Known for its relaxed lifestyle, colorful festivals, and ocean sunsets, Goa balances history and modern joy effortlessly. Every corner carries a sense of freedom and celebration.", "gujarat": "📍 Let’s learn about Gujarat.\nGujarat stands proud with its entrepreneurial spirit and ancient civilization roots. From the white desert of Kutch to the Gir forests, it reflects diversity in landscapes and traditions. The state is also deeply connected to Mahatma Gandhi’s legacy.", "haryana": "📍 Let’s learn about Haryana.\nHaryana represents India’s agricultural strength and ancient warrior culture. Known for its rural traditions and proximity to Delhi, the state balances modern growth with deeply rooted customs.", "himachal pradesh": "📍 Let’s learn about Himachal Pradesh.\nNestled in the Himalayas, Himachal Pradesh is a land of snowy peaks, pine forests, and peaceful hill towns. Its calm environment attracts travelers seeking nature, spirituality, and adventure alike.", "jharkhand": "📍 Let’s learn about Jharkhand.\nJharkhand is rich in forests, waterfalls, and tribal heritage. Often called the Land of Forests, it holds a strong cultural identity connected deeply to nature and earth.", "karnataka": "📍 Let’s learn about Karnataka.\nKarnataka blends history, technology, and nature seamlessly. From the ruins of Hampi to the modern skyline of Bengaluru, the state reflects India’s journey from ancient to futuristic.", "kerala": "📍 Let’s learn about Kerala.\nKnown as God’s Own Country, Kerala is a land of backwaters, coconut palms, and monsoon magic. Its literacy, Ayurveda traditions, and slow-paced life make it one of India’s most harmonious states.", "madhya pradesh": "📍 Let’s learn about Madhya Pradesh.\nLocated at the heart of India, Madhya Pradesh is rich in wildlife, heritage sites, and ancient temples. The state beautifully preserves history through architecture and forests.", "maharashtra": "📍 Let’s learn about Maharashtra.\nMaharashtra represents ambition and tradition together. Mumbai symbolizes dreams and opportunities, while ancient caves, forts, and rural traditions reflect its historical depth.", "manipur": "📍 Let’s learn about Manipur.\nManipur is known for its graceful dance forms, floating Loktak Lake, and vibrant traditions. The state carries a quiet elegance rooted in art and nature.", "meghalaya": "📍 Let’s learn about Meghalaya.\nMeghalaya is a land of clouds, rain, and living root bridges. Its natural beauty feels almost mythical, where hills breathe mist and waterfalls flow endlessly.", "mizoram": "📍 Let’s learn about Mizoram.\nMizoram is a peaceful hill state marked by strong community values and scenic beauty. Its landscapes reflect calmness, discipline, and harmony with nature.", "nagaland": "📍 Let’s learn about Nagaland.\nNagaland is a land of vibrant tribes and festivals. Known for the Hornbill Festival, it celebrates identity, courage, and rich ancestral traditions.", "odisha": "📍 Let’s learn about Odisha.\nOdisha carries a strong spiritual aura through its ancient temples and classical dance forms. Its coastline, culture, and heritage reflect timeless devotion.", "punjab": "📍 Let’s learn about Punjab.\nPunjab radiates energy, courage, and warmth. Known for its fertile lands, music, and hospitality, it celebrates life with passion and pride.", "rajasthan": "📍 Let’s learn about Rajasthan.\nRajasthan is the land of kings, deserts, and forts. Its grand palaces, colorful attire, and royal history narrate stories of valor and elegance.", "sikkim": "📍 Let’s learn about Sikkim.\nSikkim is a small Himalayan paradise known for its clean environment, monasteries, and mountain views. It represents harmony between humans and nature.", "tamil nadu": "📍 Let’s learn about Tamil Nadu.\nTamil Nadu is one of the world’s oldest living cultures. Its magnificent temples, classical arts, and deep-rooted traditions define its timeless identity.", "telangana": "📍 Let’s learn about Telangana.\nTelangana reflects a rich blend of history and modern development. Its forts, cuisine, and cultural pride make it uniquely vibrant.", "tripura": "📍 Let’s learn about Tripura.\nTripura is known for its royal heritage and quiet landscapes. It carries a blend of tribal culture and historical significance.", "uttar pradesh": "📍 Let’s learn about Uttar Pradesh.\nUttar Pradesh holds India’s spiritual and historical soul. From the Taj Mahal to the ghats of Varanasi, it reflects devotion and legacy.", "uttarakhand": "📍 Let’s learn about Uttarakhand.\nUttarakhand is the land of gods and mountains. Sacred rivers, temples, and peaceful hill towns define its spiritual essence.", "west bengal": "📍 Let’s learn about West Bengal.\nWest Bengal celebrates art, literature, and intellect. From Kolkata’s cultural depth to Darjeeling’s hills, it thrives on creativity and expression.", /* -------- UNION TERRITORIES (8) -------- */ "andaman and nicobar islands": "📍 Let’s learn about Andaman & Nicobar Islands.\nThese islands are a tropical paradise surrounded by turquoise waters. Rich marine life, history, and isolation make them truly unique.", "chandigarh": "📍 Let’s learn about Chandigarh.\nIndia’s first planned city, Chandigarh symbolizes modern architecture and organized urban life blended with greenery.", "dadra and nagar haveli and daman and diu": "📍 Let’s learn about Dadra & Nagar Haveli and Daman & Diu.\nThis coastal region reflects Portuguese heritage, calm beaches, and cultural simplicity.", "delhi": "📍 Let’s learn about Delhi.\nIndia’s capital carries layers of history, politics, and culture. Ancient monuments coexist with modern life at every corner.", "jammu and kashmir": "📍 Let’s learn about Jammu & Kashmir.\nOften called heaven on earth, the region is known for its valleys, lakes, and snow-covered mountains.", "ladakh": "📍 Let’s learn about Ladakh.\nLadakh is a high-altitude desert of silence and spirituality. Monasteries, rugged terrain, and clear skies define its soul.", "lakshadweep": "📍 Let’s learn about Lakshadweep.\nLakshadweep is a cluster of coral islands known for crystal-clear waters and untouched marine beauty.", "puducherry": "📍 Let’s learn about Puducherry.\nPuducherry blends French charm with Indian culture. Its calm streets, beaches, and cafés create a serene atmosphere." };
+;
+
+const keys = Object.keys(data);
+
+function scrollBottom(){
+  setTimeout(()=>{
+    const box=document.getElementById("msgBox");
+    box.scrollTop=box.scrollHeight;
+  },50);
+}
+
+$scope.autoSuggest=function(){
+  if(!$scope.userInput){$scope.suggestions=[];return;}
+  let q=$scope.userInput.toLowerCase();
+  $scope.suggestions=keys.filter(k=>k.includes(q)).slice(0,5);
+};
+
+$scope.selectSuggestion=function(s){
+  $scope.userInput=s;
+  $scope.suggestions=[];
+};
+
+$scope.send=function(){
+  if(!$scope.userInput)return;
+  let key=$scope.userInput.toLowerCase();
+  $scope.messages.push({sender:"user",text:$scope.userInput});
+  let reply=data[key]||"❓ Please type full State / UT name.";
+  $scope.messages.push({sender:"bot",text:reply});
+  $scope.userInput="";
+  $scope.suggestions=[];
+  scrollBottom();
+};
+
+$scope.checkEnter=function(e){
+  if(e.key==="Enter")$scope.send();
+};
+});
+</script>
+
+<!-- ===============================
+     BOOK YOUR TRAVEL SECTION
+=================================-->
+
+
+
+<div class="booking-section">
+  <div class="booking-title">
+    Plan Your Journey
+  </div>
+
+  <div class="booking-buttons">
+
+    <a href="https://www.makemytrip.com/flights/" 
+       target="_blank" 
+       class="booking-btn flight-btn">
+       Book Your Flight
+    </a>
+
+    <a href="https://www.irctc.co.in/" 
+       target="_blank" 
+       class="booking-btn train-btn">
+       Book Your Train
+    </a>
+
+    <a href="https://www.olacabs.com/" 
+       target="_blank" 
+       class="booking-btn ride-btn">
+       Book Your Ride
+    </a>
+
+    <a href="https://maps.google.com/" 
+       target="_blank" 
+       class="booking-btn ride-btn">
+       View Map
+    </a>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login – Maps & Memories</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#fff9e6,#fffdf5);
+  overflow:hidden;
+  color:#2d2d2d;
+}
+
+/* Floating Abstract Shapes */
+body::before, body::after{
+  content:"";
+  position:fixed;
+  width:600px;
+  height:600px;
+  border-radius:50%;
+  z-index:-1;
+  filter:blur(140px);
+  animation: float 8s ease-in-out infinite alternate;
+}
+
+body::before{
+  background:#ffe8a3;
+  top:-200px;
+  left:-200px;
+}
+
+body::after{
+  background:#fff1bf;
+  bottom:-200px;
+  right:-200px;
+  animation-delay:2s;
+}
+
+@keyframes float{
+  from{ transform:translateY(0px); }
+  to{ transform:translateY(40px); }
+}
+
+/* Layout */
+.login-wrapper{
+  display:grid;
+  grid-template-columns: 1.2fr 0.8fr 1.4fr;
+  align-items:center;
+  padding:80px 8%;
+  min-height:100vh;
+  gap:60px;
+}
+
+/* Left Text */
+.login-left{
+  animation: slideInLeft 1s ease forwards;
+  opacity:0;
+}
+
+.login-left h1{
+  font-size:3rem;
+  font-weight:700;
+  margin-bottom:20px;
+}
+
+.login-left p{
+  font-size:1.1rem;
+  line-height:1.9;
+  color:#555;
+  text-align:justify;
+}
+
+/* Decorative Images */
+.hero-images{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  width:320px;
+  margin:auto;
+  animation: fadeIn 1.2s ease forwards;
+  opacity:0;
+}
+
+.hero-images img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+  border-radius:18px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.08);
+  transition:0.4s ease;
+}
+
+.hero-images img:hover{
+  transform:scale(1.08);
+}
+
+/* Login Card */
+.login-form{
+  background:white;
+  padding:50px;
+  border-radius:30px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.08);
+  width:480px;
+  max-width:100%;
+  animation: slideInRight 1s ease forwards;
+  opacity:0;
+}
+
+.login-form h2{
+  text-align:center;
+  margin-bottom:30px;
+  font-weight:600;
+}
+
+.login-form input{
+  border-radius:40px;
+  padding:14px 20px;
+  margin-bottom:18px;
+  border:none;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+  transition:0.3s;
+}
+
+.login-form input:focus{
+  box-shadow:0 8px 25px rgba(230,184,0,0.3);
+  transform:scale(1.02);
+}
+
+.login-btn{
+  width:100%;
+  padding:14px;
+  border-radius:40px;
+  border:none;
+  background:#f4c542;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.login-btn:hover{
+  background:#e0b836;
+  transform:translateY(-3px);
+  box-shadow:0 12px 25px rgba(0,0,0,0.15);
+}
+
+.login-form a{
+  color:#c9a227;
+  text-decoration:none;
+}
+
+.login-form a:hover{
+  text-decoration:underline;
+}
+
+/* Animations */
+@keyframes slideInLeft{
+  from{ transform:translateX(-60px); opacity:0; }
+  to{ transform:translateX(0); opacity:1; }
+}
+
+@keyframes slideInRight{
+  from{ transform:translateX(60px); opacity:0; }
+  to{ transform:translateX(0); opacity:1; }
+}
+
+@keyframes fadeIn{
+  from{ opacity:0; transform:translateY(40px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+/* Responsive */
+@media(max-width:1100px){
+  .login-wrapper{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+  body{
+    overflow:auto;
+  }
+}
+
+footer{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#f4e3a3;
+  padding:8px;
+  font-size:0.8rem;
+  display:flex;
+  justify-content:space-evenly;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+  <!-- LEFT TEXT -->
+  <div class="login-left">
+    <h1>Welcome Back</h1>
+  </div>
+
+  <!-- CENTER DECORATIVE IMAGES -->
+  <div class="hero-images">
+    <img src="/images/bgimage.jpg">
+    <img src="/images/rajasthan.jpg">
+    <img src="/images/blackbuck.jpg">
+    <img src="/images/jk.jpg">
+  </div>
+
+  <!-- RIGHT LOGIN FORM -->
+  <div class="login-form">
+
+    <h2>Login</h2>
+
+    {% if error %}
+    <div class="alert alert-danger text-center">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+      <input type="text" name="username" class="form-control" placeholder="Username" required>
+      <input type="password" name="password" class="form-control" placeholder="Password" required>
+
+      <button type="submit" class="login-btn">
+        Login
+      </button>
+    </form>
+
+    <p class="text-center mt-4">
+      Don’t have an account? <a href="/signup">Sign Up</a>
+    </p>
+
+    <p class="text-center mt-2">
+  <a href="/forgot-password">Forgot Password?</a>
+</p>
+
+  </div>
+
+</div>
+
+<footer>
+<span>🌍 Maps&Memories © 2026</span>
+<span>Explore • Plan • Experience India</span>
+<span>Flask + AngularJs</span>
+</footer>
+
+</body>
+</html>

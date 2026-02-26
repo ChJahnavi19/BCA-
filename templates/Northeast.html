@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="northeastTripApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>North-Eastern India Trip Itinerary</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+  <style>
+    body {
+  font-family: "Segoe UI", cursive, sans-serif;
+  background: linear-gradient(135deg,
+    #ffd6e8,
+    #e6ddff,
+    #d7f0ff,
+    #d8f8e1,
+    #fff3d6
+  );
+  text-align: center;
+  font-weight: bold;
+}
+
+    h1 {
+      margin: 30px 0;
+      color: #2c3e50;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding: 20px;
+      justify-items: center;
+    }
+
+    .card {
+      transition: transform 0.3s;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 200px;
+      width: 100%;
+    }
+
+    .card-body {
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .card:hover { transform: scale(1.05); }
+
+    .arunachal { background-color: #b3e5fc; color: #01579b; }
+    .assam { background-color: #c8e6c9; color: #1b5e20; }
+    .manipur { background-color: #ffe0b2; color: #e65100; }
+    .meghalaya { background-color: #f8bbd0; color: #880e4f; }
+    .mizoram { background-color: #d1c4e9; color: #4a148c; }
+    .nagaland { background-color: #fff9c4; color: #f57f17; }
+    .sikkim { background-color: #ffccbc; color: #bf360c; }
+    .tripura { background-color: #c5cae9; color: #1a237e; }
+  </style>
+</head>
+
+<body ng-controller="NortheastTripController">
+
+<h1>North-Eastern India Trip Itinerary</h1>
+
+<div ng-repeat="state in states">
+  <h2>[[state.name]]</h2>
+
+  <div class="container grid-container" ng-class="{
+    'arunachal': state.name=='Arunachal Pradesh',
+    'assam': state.name=='Assam',
+    'manipur': state.name=='Manipur',
+    'meghalaya': state.name=='Meghalaya',
+    'mizoram': state.name=='Mizoram',
+    'nagaland': state.name=='Nagaland',
+    'sikkim': state.name=='Sikkim',
+    'tripura': state.name=='Tripura'
+  }">
+
+    <div class="card border-primary" ng-repeat="place in state.places">
+      <div class="card-body">
+        <h5>[[place.name]]</h5>
+        <p>[[place.description]]</p>
+        <p><strong>Best Time:</strong> [[place.bestTime]]</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var app = angular.module('northeastTripApp', []);
+
+  app.config(function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+  });
+
+  app.controller('NortheastTripController', function($scope) {
+    $scope.states = [
+
+      { name: "Arunachal Pradesh", places: [
+        { name: "Tawang", description: "Famous for Tawang Monastery and scenic mountains. Budget: ₹15,000–₹25,000", bestTime: "April to June" },
+        { name: "Itanagar", description: "Capital city with archaeological sites. Budget: ₹8,000–₹12,000", bestTime: "March to June" },
+        { name: "Ziro Valley", description: "Rice terraces and Apatani tribal villages. Budget: ₹10,000–₹15,000", bestTime: "September to November" },
+        { name: "Bomdila", description: "Hill station with monasteries and viewpoints. Budget: ₹8,000–₹12,000", bestTime: "March to June" },
+        { name: "Dirang", description: "Hot springs and scenic valleys. Budget: ₹7,000–₹12,000", bestTime: "March to June" },
+        { name: "Roing", description: "Nature and tribal culture. Budget: ₹6,000–₹10,000", bestTime: "April to June" }
+      ]},
+
+      { name: "Assam", places: [
+        { name: "Guwahati", description: "Gateway to Northeast, Kamakhya Temple. Budget: ₹5,000–₹10,000", bestTime: "October to March" },
+        { name: "Kaziranga National Park", description: "UNESCO site with one-horned rhinos. Budget: ₹6,000–₹12,000", bestTime: "November to April" },
+        { name: "Majuli", description: "River island with Assamese culture. Budget: ₹5,000–₹10,000", bestTime: "October to March" },
+        { name: "Sivasagar", description: "Ahom dynasty monuments. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Tezpur", description: "Cultural & historical city. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Haflong", description: "Hill station with scenic beauty. Budget: ₹6,000–₹12,000", bestTime: "October to March" }
+      ]},
+
+      { name: "Manipur", places: [
+        { name: "Imphal", description: "Capital city, Kangla Fort and markets. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Loktak Lake", description: "Floating phumdis and scenic lake. Budget: ₹5,000–₹10,000", bestTime: "October to March" },
+        { name: "Ukhrul", description: "Hill district with villages. Budget: ₹6,000–₹12,000", bestTime: "March to June" },
+        { name: "Moirang", description: "Historical WWII site. Budget: ₹3,000–₹7,000", bestTime: "October to March" },
+        { name: "Moreh", description: "Trade town on Myanmar border. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Andro", description: "Heritage village with pottery and culture. Budget: ₹3,000–₹6,000", bestTime: "October to March" }
+      ]},
+
+      { name: "Meghalaya", places: [
+        { name: "Shillong", description: "Capital city, waterfalls and gardens. Budget: ₹5,000–₹10,000", bestTime: "October to March" },
+        { name: "Cherrapunji", description: "Wettest place on Earth, caves & falls. Budget: ₹6,000–₹12,000", bestTime: "October to March" },
+        { name: "Mawlynnong", description: "Cleanest village in Asia. Budget: ₹3,000–₹6,000", bestTime: "October to March" },
+        { name: "Dawki", description: "Crystal-clear river on Bangladesh border. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Mawsynram", description: "Wettest place on Earth. Budget: ₹5,000–₹10,000", bestTime: "October to March" },
+        { name: "Nongriat", description: "Trekking to double-decker root bridge. Budget: ₹4,000–₹8,000", bestTime: "October to March" }
+      ]},
+
+      { name: "Mizoram", places: [
+        { name: "Aizawl", description: "Capital city with scenic hills. Budget: ₹5,000–₹10,000", bestTime: "October to March" },
+        { name: "Champhai", description: "Border town with vineyards. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Serchhip", description: "Hills and tribal culture. Budget: ₹3,000–₹7,000", bestTime: "October to March" },
+        { name: "Lunglei", description: "Scenic landscapes & rivers. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Saitual", description: "Trekking & villages. Budget: ₹3,000–₹6,000", bestTime: "October to March" },
+        { name: "Vairengte", description: "Border town, cultural experience. Budget: ₹3,000–₹6,000", bestTime: "October to March" }
+      ]},
+
+      { name: "Nagaland", places: [
+        { name: "Kohima", description: "Capital city with war memorials. Budget: ₹5,000–₹10,000", bestTime: "October to March" },
+        { name: "Dimapur", description: "Commercial hub with markets. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Mon", description: "Konyak tribe villages. Budget: ₹6,000–₹12,000", bestTime: "October to March" },
+        { name: "Mokokchung", description: "Ao tribe heritage town. Budget: ₹5,000–₹10,000", bestTime: "October to March" },
+        { name: "Tuensang", description: "Tribal culture & hills. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Phek", description: "Traditional villages and landscapes. Budget: ₹4,000–₹8,000", bestTime: "October to March" }
+      ]},
+
+      { name: "Sikkim", places: [
+        { name: "Gangtok", description: "Capital city with monasteries & MG Road. Budget: ₹5,000–₹10,000", bestTime: "March to June" },
+        { name: "Pelling", description: "Hill station with Pemayangtse Monastery. Budget: ₹6,000–₹12,000", bestTime: "March to June" },
+        { name: "Namchi", description: "Samdruptse statue & cultural sites. Budget: ₹4,000–₹8,000", bestTime: "March to June" },
+        { name: "Lachung", description: "Mountain village near Yumthang Valley. Budget: ₹6,000–₹12,000", bestTime: "March to June" },
+        { name: "Lachen", description: "Gateway to Gurudongmar Lake. Budget: ₹6,000–₹12,000", bestTime: "March to June" },
+        { name: "Ravangla", description: "Peaceful hills & monasteries. Budget: ₹5,000–₹10,000", bestTime: "March to June" }
+      ]},
+
+      { name: "Tripura", places: [
+        { name: "Agartala", description: "Capital city with Ujjayanta Palace. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Udaipur", description: "City with lakes and temples. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Unakoti", description: "Rock-cut sculptures & pilgrimage site. Budget: ₹3,000–₹6,000", bestTime: "October to March" },
+        { name: "Neermahal", description: "Water palace in lake. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Sepahijala Wildlife Sanctuary", description: "Wildlife & nature. Budget: ₹4,000–₹8,000", bestTime: "October to March" },
+        { name: "Pilak", description: "Archaeological ruins & Buddhist heritage. Budget: ₹3,000–₹6,000", bestTime: "October to March" }
+      ]}
+    ];
+  });
+</script>
+
+</body>
+</html>

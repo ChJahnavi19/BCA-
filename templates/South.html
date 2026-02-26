@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="southTripApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Southern India Trip Itinerary</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+  <style>
+    body {
+  font-family: "Segoe UI", cursive, sans-serif;
+  background: linear-gradient(135deg,
+    #ffd6e8,
+    #e6ddff,
+    #d7f0ff,
+    #d8f8e1,
+    #fff3d6
+  );
+  text-align: center;
+  font-weight: bold;
+}
+
+    h1 {
+      margin: 30px 0;
+      color: #2c3e50;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding: 20px;
+      justify-items: center;
+    }
+
+    .card {
+      transition: transform 0.3s;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 200px;
+      width: 100%;
+    }
+
+    .card-body {
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .card:hover { transform: scale(1.05); }
+
+    .andhra { background-color: #fff9c4; color: #3e2723; }
+    .karnataka { background-color: #c8e6c9; color: #1b5e20; }
+    .kerala { background-color: #b3e5fc; color: #01579b; }
+    .tamilnadu { background-color: #ffe0b2; color: #e65100; }
+    .telangana { background-color: #f8bbd0; color: #880e4f; }
+  </style>
+</head>
+
+<body ng-controller="SouthTripController">
+
+<h1>Southern India Trip Itinerary</h1>
+
+<div ng-repeat="state in states">
+  <h2>[[state.name]]</h2>
+
+  <div class="container grid-container" ng-class="{
+    'andhra': state.name=='Andhra Pradesh',
+    'karnataka': state.name=='Karnataka',
+    'kerala': state.name=='Kerala',
+    'tamilnadu': state.name=='Tamil Nadu',
+    'telangana': state.name=='Telangana'
+  }">
+
+    <div class="card border-primary" ng-repeat="place in state.places">
+      <div class="card-body">
+        <h5>[[place.name]]</h5>
+        <p>[[place.description]]</p>
+        <p><strong>Best Time:</strong> [[place.bestTime]]</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var app = angular.module('southTripApp', []);
+
+  app.config(function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+  });
+
+  app.controller('SouthTripController', function($scope) {
+    $scope.states = [
+
+      { name: "Andhra Pradesh", places: [
+        { name: "Visakhapatnam", description: "Beach city with scenic hills. Budget: ₹6,000–₹12,000", bestTime: "October to March" },
+        { name: "Tirupati", description: "Famous Hindu pilgrimage. Budget: ₹4,000–₹8,000", bestTime: "September to March" },
+        { name: "Araku Valley", description: "Hill station with coffee plantations. Budget: ₹7,000–₹12,000", bestTime: "October to February" },
+        { name: "Vijayawada", description: "Cultural city on Krishna river. Budget: ₹5,000–₹9,000", bestTime: "October to February" },
+        { name: "Amaravati", description: "Historic Buddhist site. Budget: ₹4,000–₹7,000", bestTime: "October to February" },
+        { name: "Lepakshi", description: "Ancient temple town. Budget: ₹3,000–₹6,000", bestTime: "October to March" }
+      ]},
+
+      { name: "Karnataka", places: [
+        { name: "Bengaluru", description: "IT hub and garden city. Budget: ₹6,000–₹12,000", bestTime: "October to February" },
+        { name: "Mysuru", description: "Palaces and heritage city. Budget: ₹5,000–₹9,000", bestTime: "October to March" },
+        { name: "Hampi", description: "UNESCO ruins and temples. Budget: ₹6,000–₹10,000", bestTime: "October to February" },
+        { name: "Coorg", description: "Coffee plantations and hills. Budget: ₹7,000–₹14,000", bestTime: "October to March" },
+        { name: "Gokarna", description: "Beach and pilgrimage town. Budget: ₹6,000–₹10,000", bestTime: "October to March" },
+        { name: "Chikmagalur", description: "Hill station with trekking. Budget: ₹7,000–₹12,000", bestTime: "September to March" }
+      ]},
+
+      { name: "Kerala", places: [
+        { name: "Munnar", description: "Tea gardens and hills. Budget: ₹7,000–₹14,000", bestTime: "September to March" },
+        { name: "Alleppey", description: "Backwaters and houseboats. Budget: ₹8,000–₹15,000", bestTime: "October to March" },
+        { name: "Kochi", description: "Historic port city. Budget: ₹6,000–₹10,000", bestTime: "October to March" },
+        { name: "Wayanad", description: "Forests and waterfalls. Budget: ₹7,000–₹12,000", bestTime: "October to May" },
+        { name: "Thekkady", description: "Wildlife sanctuary. Budget: ₹6,000–₹10,000", bestTime: "October to April" },
+        { name: "Varkala", description: "Cliff beach town. Budget: ₹6,000–₹10,000", bestTime: "October to March" }
+      ]},
+
+      { name: "Tamil Nadu", places: [
+        { name: "Chennai", description: "Capital city and beaches. Budget: ₹6,000–₹12,000", bestTime: "November to February" },
+        { name: "Ooty", description: "Hill station and lakes. Budget: ₹7,000–₹14,000", bestTime: "October to June" },
+        { name: "Kodaikanal", description: "Cool climate hill town. Budget: ₹7,000–₹14,000", bestTime: "October to March" },
+        { name: "Madurai", description: "Meenakshi Temple city. Budget: ₹5,000–₹9,000", bestTime: "October to March" },
+        { name: "Rameswaram", description: "Pilgrimage island town. Budget: ₹5,000–₹8,000", bestTime: "October to April" },
+        { name: "Thanjavur", description: "Brihadeeswarar Temple. Budget: ₹4,000–₹7,000", bestTime: "October to March" }
+      ]},
+
+      { name: "Telangana", places: [
+        { name: "Hyderabad", description: "Charminar and IT hub. Budget: ₹6,000–₹12,000", bestTime: "October to February" },
+        { name: "Warangal", description: "Kakatiya heritage city. Budget: ₹4,000–₹7,000", bestTime: "October to March" },
+        { name: "Nagarjuna Sagar", description: "Dam and waterfall views. Budget: ₹5,000–₹8,000", bestTime: "October to February" },
+        { name: "Medak", description: "Famous cathedral church. Budget: ₹3,000–₹6,000", bestTime: "October to March" },
+        { name: "Bhadrachalam", description: "Rama temple town. Budget: ₹4,000–₹7,000", bestTime: "October to March" },
+        { name: "Adilabad", description: "Waterfalls and forests. Budget: ₹5,000–₹9,000", bestTime: "October to February" }
+      ]}
+
+    ];
+  });
+</script>
+
+</body>
+</html>

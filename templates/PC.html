@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="cityTripApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popular Cities Trip Itinerary</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+
+  <style>
+    body {
+  font-family: "Segoe UI", cursive, sans-serif;
+  background: linear-gradient(135deg,
+    #ffd6e8,
+    #e6ddff,
+    #d7f0ff,
+    #d8f8e1,
+    #fff3d6
+  );
+  text-align: center;
+  font-weight: bold;
+}
+
+    h1 {
+      margin: 30px 0;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+    h2 {
+      margin-top: 40px;
+      font-weight: bold;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding: 20px;
+      justify-items: center;
+    }
+
+    .card {
+      transition: transform 0.3s;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 200px;
+      width: 100%;
+    }
+
+    .card-body {
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .card:hover { transform: scale(1.05); }
+
+    .mumbai { background-color: #ffe0b2; color: #e65100; }
+    .delhiCity { background-color: #c8e6c9; color: #1b5e20; }
+    .bangalore { background-color: #f8bbd0; color: #880e4f; }
+    .kolkata { background-color: #b3e5fc; color: #01579b; }
+    .chennai { background-color: #d1c4e9; color: #4a148c; }
+    .jaipurCity { background-color: #fff9c4; color: #f57f17; }
+    .hyderabad { background-color: #ffccbc; color: #bf360c; }
+    .ahmedabad { background-color: #f0f4c3; color: #33691e; }
+    .goaCity { background-color: #fce4ec; color: #880e4f; }
+    .lucknowCity { background-color: #e1bee7; color: #4a148c; }
+  </style>
+</head>
+
+<body ng-controller="CityTripController">
+
+<h1>Popular Cities Trip Itinerary</h1>
+
+<div ng-repeat="city in cities">
+  <h2>[[city.name]]</h2>
+
+  <div class="container grid-container" ng-class="{
+    'mumbai': city.name=='Mumbai',
+    'delhiCity': city.name=='Delhi',
+    'bangalore': city.name=='Bangalore',
+    'kolkata': city.name=='Kolkata',
+    'chennai': city.name=='Chennai',
+    'jaipurCity': city.name=='Jaipur',
+    'hyderabad': city.name=='Hyderabad',
+    'ahmedabad': city.name=='Ahmedabad',
+    'goaCity': city.name=='Goa',
+    'lucknowCity': city.name=='Lucknow'
+  }">
+
+    <div class="card border-primary" ng-repeat="place in city.places">
+      <div class="card-body">
+        <h5 class="card-title">[[place.name]]</h5>
+        <p class="card-text">[[place.description]]</p>
+        <p><strong>Best Time:</strong> [[place.bestTime]]</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var app = angular.module('cityTripApp', []);
+
+  app.config(function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+  });
+
+  app.controller('CityTripController', function($scope) {
+    $scope.cities = [
+      { name: "Mumbai", places: [
+        { name: "Gateway of India", description: "Iconic monument and tourist hub. Budget: ₹1,000–₹3,000", bestTime: "October to February" },
+        { name: "Marine Drive", description: "Famous seaside promenade. Budget: Free", bestTime: "October to February" },
+        { name: "Chhatrapati Shivaji Terminus", description: "UNESCO heritage railway station. Budget: Free", bestTime: "October to February" },
+        { name: "Elephanta Caves", description: "Historic rock-cut caves. Budget: ₹500–₹1,500", bestTime: "October to March" },
+        { name: "Juhu Beach", description: "Popular beach for food and sunset. Budget: Free", bestTime: "October to February" },
+        { name: "Sanjay Gandhi National Park", description: "Wildlife park with Kanheri Caves. Budget: ₹1,500–₹3,000", bestTime: "October to March" }
+      ]},
+      { name: "Delhi", places: [
+        { name: "India Gate", description: "Iconic war memorial. Budget: ₹2,000–₹5,000", bestTime: "October to March" },
+        { name: "Red Fort", description: "Historic Mughal fort. Budget: ₹3,000–₹6,000", bestTime: "October to March" },
+        { name: "Qutub Minar", description: "Tallest brick minaret. Budget: ₹2,000–₹5,000", bestTime: "October to March" },
+        { name: "Lotus Temple", description: "Baháʼí House of Worship. Budget: ₹1,000–₹3,000", bestTime: "October to March" },
+        { name: "Humayun's Tomb", description: "Mughal architecture masterpiece. Budget: ₹2,000–₹4,000", bestTime: "October to March" },
+        { name: "Chandni Chowk", description: "Historic market for food and shopping. Budget: ₹2,000–₹5,000", bestTime: "October to March" }
+      ]},
+      { name: "Bangalore", places: [
+        { name: "Lalbagh Botanical Garden", description: "Famous garden with glasshouse. Budget: ₹500–₹1,500", bestTime: "October to February" },
+        { name: "Bangalore Palace", description: "European-style palace. Budget: ₹1,000–₹2,500", bestTime: "October to February" },
+        { name: "Cubbon Park", description: "Large green park in the city. Budget: Free", bestTime: "October to February" },
+        { name: "Vidhana Soudha", description: "Legislative building. Budget: Free", bestTime: "October to February" },
+        { name: "Tipu Sultan's Summer Palace", description: "Historic palace with artifacts. Budget: ₹500–₹1,500", bestTime: "October to February" },
+        { name: "Bannerghatta National Park", description: "Safari and zoo experience. Budget: ₹1,500–₹3,000", bestTime: "October to February" }
+      ]},
+      { name: "Kolkata", places: [
+        { name: "Victoria Memorial", description: "Iconic white-marble monument. Budget: ₹500–₹1,500", bestTime: "October to March" },
+        { name: "Howrah Bridge", description: "Famous cantilever bridge. Budget: Free", bestTime: "October to March" },
+        { name: "Dakshineswar Kali Temple", description: "Famous Hindu temple. Budget: Free", bestTime: "October to March" },
+        { name: "Indian Museum", description: "Largest and oldest museum. Budget: ₹500–₹1,500", bestTime: "October to March" },
+        { name: "Belur Math", description: "Headquarters of Ramakrishna Mission. Budget: Free", bestTime: "October to March" },
+        { name: "Eco Park", description: "Urban park with lakes and rides. Budget: ₹500–₹1,500", bestTime: "October to March" }
+      ]},
+      { name: "Chennai", places: [
+        { name: "Marina Beach", description: "One of the longest urban beaches. Budget: Free", bestTime: "November to February" },
+        { name: "Fort St. George", description: "Historic fort and museum. Budget: ₹500–₹1,500", bestTime: "November to February" },
+        { name: "Kapaleeshwarar Temple", description: "Famous Dravidian-style temple. Budget: Free", bestTime: "November to February" },
+        { name: "Santhome Cathedral", description: "Historic cathedral. Budget: Free", bestTime: "November to February" },
+        { name: "Guindy National Park", description: "Urban wildlife sanctuary. Budget: ₹500–₹1,500", bestTime: "November to February" },
+        { name: "Valluvar Kottam", description: "Monument honoring poet Thiruvalluvar. Budget: Free", bestTime: "November to February" }
+      ]},
+      { name: "Jaipur", places: [
+        { name: "Hawa Mahal", description: "Palace of Winds. Budget: ₹500–₹1,500", bestTime: "October to March" },
+        { name: "Amber Fort", description: "Hilltop fort with light show. Budget: ₹1,500–₹3,000", bestTime: "October to March" },
+        { name: "City Palace", description: "Royal palace complex. Budget: ₹1,000–₹2,500", bestTime: "October to March" },
+        { name: "Jantar Mantar", description: "Astronomical observatory. Budget: ₹500–₹1,500", bestTime: "October to March" },
+        { name: "Nahargarh Fort", description: "Sunset viewpoints. Budget: ₹500–₹1,500", bestTime: "October to March" },
+        { name: "Albert Hall Museum", description: "Art and historical museum. Budget: ₹500–₹1,500", bestTime: "October to March" }
+      ]}
+    ];
+  });
+</script>
+
+</body>
+</html>
